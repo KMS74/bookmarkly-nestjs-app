@@ -4,6 +4,8 @@ import {
   Controller,
   Delete,
   Get,
+  HttpCode,
+  HttpStatus,
   Param,
   ParseIntPipe,
   Patch,
@@ -34,10 +36,23 @@ export class CategoryController {
   @Post()
   createCategory(
     @GetUser('id') userId: number,
-
     @Body() createCategoryDto: CreateCategoryDto,
   ) {
     return this.categoryService.createCategory(userId, createCategoryDto);
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @Post(':categoryId/bookmarks/:bookmarkId')
+  async addBookmarkToCategory(
+    @GetUser('id') userId: number,
+    @Param('categoryId', ParseIntPipe) categoryId: number,
+    @Param('bookmarkId', ParseIntPipe) bookmarkId: number,
+  ) {
+    return this.categoryService.addBookmarkToCategory(
+      categoryId,
+      bookmarkId,
+      userId,
+    );
   }
 
   @Patch(':categoryId')
@@ -53,6 +68,21 @@ export class CategoryController {
     );
   }
 
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @Delete(':categoryId/bookmarks/:bookmarkId')
+  async deleteBookmarkFromCategory(
+    @GetUser('id') userId: number,
+    @Param('categoryId', ParseIntPipe) categoryId: number,
+    @Param('bookmarkId', ParseIntPipe) bookmarkId: number,
+  ) {
+    return this.categoryService.deleteBookmarkFromCategory(
+      categoryId,
+      bookmarkId,
+      userId,
+    );
+  }
+
+  @HttpCode(HttpStatus.NO_CONTENT)
   @Delete(':categoryId')
   deleteCategory(
     @GetUser('id') userId: number,

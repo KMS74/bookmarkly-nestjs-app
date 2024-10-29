@@ -39,6 +39,44 @@ export class CategoryService {
     return category;
   }
 
+  async addBookmarkToCategory(
+    categoryId: number,
+    bookmarkId: number,
+    userId: number,
+  ) {
+    const category = await this.prisma.category.findUnique({
+      where: {
+        id: categoryId,
+      },
+    });
+
+    const bookmark = await this.prisma.bookmark.findUnique({
+      where: {
+        id: bookmarkId,
+      },
+    });
+
+    if (!category || category.userId !== userId) {
+      throw new NotFoundException(`Category with id ${categoryId} not found`);
+    }
+
+    if (!bookmark || bookmark.userId !== userId) {
+      throw new NotFoundException(`Bookmark with id ${bookmarkId} not found`);
+    }
+
+    return await this.prisma.bookmark.update({
+      where: {
+        id: bookmarkId,
+      },
+      include: {
+        category: true,
+      },
+      data: {
+        categoryId,
+      },
+    });
+  }
+
   async updateCategory(
     userId: number,
     categoryId: number,
@@ -64,6 +102,42 @@ export class CategoryService {
     });
 
     return updatedCategory;
+  }
+
+  async deleteBookmarkFromCategory(
+    categoryId: number,
+    bookmarkId: number,
+    userId: number,
+  ) {
+    const category = await this.prisma.category.findUnique({
+      where: {
+        id: categoryId,
+      },
+    });
+
+    const bookmark = await this.prisma.bookmark.findUnique({
+      where: {
+        id: bookmarkId,
+      },
+    });
+
+    if (!category || category.userId !== userId) {
+      throw new NotFoundException(`Category with id ${categoryId} not found`);
+    }
+
+    if (!bookmark || bookmark.userId !== userId) {
+      throw new NotFoundException(`Bookmark with id ${bookmarkId} not found`);
+    }
+
+    // remove the association between the category and the bookmark
+    await this.prisma.category.update({
+      where: { id: categoryId },
+      data: {
+        bookmarks: {
+          disconnect: { id: bookmarkId },
+        },
+      },
+    });
   }
 
   async deleteCategory(userId: number, categoryId: number) {
