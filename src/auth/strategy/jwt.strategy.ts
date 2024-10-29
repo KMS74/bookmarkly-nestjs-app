@@ -14,6 +14,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false, // we want to check the expiration date
       secretOrKey: configService.get('JWT_SECRET'),
+      expiresIn: '1d', // token expires in 1 day
     });
   }
 
