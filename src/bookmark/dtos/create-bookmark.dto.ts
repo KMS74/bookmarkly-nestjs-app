@@ -1,5 +1,6 @@
 import {
   IsNotEmpty,
+  IsNumber,
   IsOptional,
   IsString,
   IsUrl,
@@ -19,4 +20,9 @@ export class CreateBookmarkDto {
 
   @IsUrl()
   link: string;
+
+  @IsNotEmpty()
+  @IsNumber()
+  @IsOptional()
+  categoryId: number;
 }

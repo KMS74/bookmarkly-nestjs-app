@@ -11,6 +11,9 @@ export class BookmarkService {
       where: {
         userId,
       },
+      include: {
+        category: true,
+      },
     });
     return bookmarks;
   }
@@ -20,6 +23,9 @@ export class BookmarkService {
       where: {
         id: bookmarkId,
         userId: userId,
+      },
+      include: {
+        category: true,
       },
     });
 
@@ -34,6 +40,9 @@ export class BookmarkService {
       data: {
         userId,
         ...createBookmarkDto,
+      },
+      include: {
+        category: true,
       },
     });
 
