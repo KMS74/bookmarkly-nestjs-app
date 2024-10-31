@@ -21,6 +21,9 @@ export class AuthService {
     const { email, password } = authDto;
     // find user by email
     const user = await this.prisma.user.findUnique({
+      omit: {
+        hash: false, // not omit the hash field from the user model locally to compare the password hash
+      },
       where: {
         email,
       },
@@ -63,8 +66,6 @@ export class AuthService {
         hash: passwordHash,
       },
     });
-
-    delete newUser.hash;
 
     return newUser;
   }

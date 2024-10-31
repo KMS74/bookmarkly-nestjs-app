@@ -11,6 +11,11 @@ export class PrismaService extends PrismaClient {
           url: config.get('DATABASE_URL'),
         },
       },
+      omit: {
+        user: {
+          hash: true, // omit the hash field from the user model globally
+        },
+      },
     });
   }
 }

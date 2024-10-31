@@ -31,9 +31,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       throw new UnauthorizedException();
     }
 
-    // delete the password hash from the user object
-    delete user.hash;
-
     return user;
   }
 }

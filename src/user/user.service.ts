@@ -16,8 +16,6 @@ export class UserService {
       },
     });
 
-    delete updatedUser.hash;
-
     return updatedUser;
   }
 }
