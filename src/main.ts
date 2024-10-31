@@ -1,6 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { ValidationPipe } from '@nestjs/common';
+import { ValidationPipe, VersioningType } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -11,6 +11,9 @@ async function bootstrap() {
       whitelist: true, // will remove any additional properties that are not in the DTO
     }),
   );
+  // add api prefix to all routes in the app
+  app.setGlobalPrefix('api');
+
   await app.listen(3000);
 }
 bootstrap();
