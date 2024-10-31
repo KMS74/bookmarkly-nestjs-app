@@ -16,7 +16,6 @@
     "prisma:dev:deploy": "prisma migrate deploy",
     "db:dev:up": "docker compose up dev-db -d",
     "db:dev:rm": "docker compose rm dev-db -s -f -v",
-    "db:dev:restart": "yarn db:dev:rm && yarn db:dev:up && yarn prisma:dev:deploy",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "test": "jest",
     "test:watch": "jest --watch",
