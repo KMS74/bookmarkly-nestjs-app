@@ -5,7 +5,8 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["omitApi"]
 }
 
 datasource db {
@@ -58,8 +59,6 @@ model Category {
 
   @@map("categories")
 }
-
-
 
 // NOTES:
 // user - bookmark (1 - M) : user can have many bookmarks and bookmark belongs to one user
