@@ -1,7 +1,6 @@
 import {
   BadRequestException,
   Injectable,
-  NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
@@ -37,7 +36,7 @@ export class AuthService {
     const isPasswordValid = await argon.verify(user.hash, password);
     // if password is incorrect, throw exception
     if (!isPasswordValid) {
-      throw new BadRequestException('Invalid login credentials');
+      throw new UnauthorizedException('Invalid login credentials');
     }
 
     const accessToken = await this.signToken(user.id, user.email);
