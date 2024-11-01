@@ -4,7 +4,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { AuthDto } from './dtos';
+import { LoginDto, SignupDto } from './dtos';
 import * as argon from 'argon2';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
@@ -16,8 +16,8 @@ export class AuthService {
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
   ) {}
-  async login(authDto: AuthDto) {
-    const { email, password } = authDto;
+  async login(loginDto: LoginDto) {
+    const { email, password } = loginDto;
     // find user by email
     const user = await this.prisma.user.findUnique({
       omit: {
@@ -45,8 +45,8 @@ export class AuthService {
       accessToken,
     };
   }
-  async signup(authDto: AuthDto) {
-    const { email, password } = authDto;
+  async signup(signupDto: SignupDto) {
+    const { email, password } = signupDto;
 
     const passwordHash = await argon.hash(password);
     const user = await this.prisma.user.findUnique({
@@ -61,7 +61,7 @@ export class AuthService {
 
     const newUser = await this.prisma.user.create({
       data: {
-        email,
+        ...signupDto,
         hash: passwordHash,
       },
     });
